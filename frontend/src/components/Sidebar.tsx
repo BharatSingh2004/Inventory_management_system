@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LayoutDashboard, Package, ShoppingCart, Users, LogOut, Settings } from 'lucide-react';
+import { LayoutDashboard, Package, ShoppingCart, Users, LogOut } from 'lucide-react';
 
 const Sidebar = () => {
   const { user, logout } = useAuth();
