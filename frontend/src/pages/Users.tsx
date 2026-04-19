@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useAuth } from '../contexts/AuthContext';
 import { Shield, UserPlus } from 'lucide-react';
 
@@ -17,9 +17,8 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/users', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/users');
+      setUsers(res.data);
       setUsers(res.data);
     } catch (error) {
       console.error(error);
@@ -31,9 +30,7 @@ const Users = () => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/auth/register', formData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.post('/auth/register', formData);
       setIsModalOpen(false);
       setFormData({ username: '', password: '', role: 'STAFF' });
       setError('');

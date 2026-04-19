@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useAuth } from '../contexts/AuthContext';
 import { Plus, Trash2 } from 'lucide-react';
 
@@ -16,9 +16,8 @@ const Products = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/products', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/products');
+      setProducts(res.data);
       setProducts(res.data);
     } catch (error) {
       console.error(error);
@@ -30,15 +29,13 @@ const Products = () => {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/products', {
+      await api.post('/products', {
         name: formData.name,
         price: parseFloat(formData.price),
         stockQuantity: parseInt(formData.stockQuantity),
         status: 'ACTIVE',
         categoryId: 1, // Seeded default
         supplierId: 1  // Seeded default
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
       setIsModalOpen(false);
       setFormData({ name: '', price: '', stockQuantity: '' });
@@ -52,9 +49,8 @@ const Products = () => {
   const handleDelete = async (id: number) => {
     if(!confirm("Are you sure you want to delete this product?")) return;
     try {
-      await axios.delete(`http://localhost:3000/api/products/${id}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      await api.delete(`/products/${id}`);
+      fetchProducts();
       fetchProducts();
     } catch (error) {
       console.error("Failed to delete", error);

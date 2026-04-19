@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useAuth } from '../contexts/AuthContext';
 import { Package, AlertTriangle, DollarSign } from 'lucide-react';
 
@@ -26,8 +26,8 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         const [productsRes, ordersRes] = await Promise.all([
-          axios.get('http://localhost:3000/api/products', { headers: { Authorization: `Bearer ${token}` } }),
-          axios.get('http://localhost:3000/api/orders', { headers: { Authorization: `Bearer ${token}` } })
+          api.get('/products'),
+          api.get('/orders')
         ]);
         
         const products = productsRes.data;

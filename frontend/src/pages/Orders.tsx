@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { useAuth } from '../contexts/AuthContext';
 import { Plus } from 'lucide-react';
 
@@ -19,9 +19,8 @@ const Orders = () => {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/orders', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/orders');
+      setOrders(res.data);
       setOrders(res.data);
     } catch (error) {
       console.error(error);
@@ -32,9 +31,8 @@ const Orders = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/products', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const res = await api.get('/products');
+      setProducts(res.data);
       setProducts(res.data);
       if(res.data.length > 0) setSelectedProduct(res.data[0].id.toString());
     } catch (error) {
@@ -48,13 +46,11 @@ const Orders = () => {
     e.preventDefault();
     if(!selectedProduct) return alert("Select a product");
     try {
-      await axios.post('http://localhost:3000/api/orders', {
+      await api.post('/orders', {
         items: [{
           productId: parseInt(selectedProduct),
           quantity: parseInt(orderQuantity)
         }]
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
       });
       setIsModalOpen(false);
       setOrderQuantity('1');
